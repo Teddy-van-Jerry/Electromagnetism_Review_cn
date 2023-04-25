@@ -1,0 +1,255 @@
+\documentclass[Chinese, use boldface, twocolumn]{lebhart}
+
+%%================================
+%% Import toolkit
+%%================================
+\usepackage{ProjLib}
+\usetikzlibrary{calc}
+\usepackage{mathtools}
+
+\usepackage{tabularx}
+\usepackage{multicol, multirow}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{derivative}
+
+\allowdisplaybreaks
+
+\sisetup{per-mode=symbol}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\aboverulesep = 0mm \belowrulesep = 0mm
+
+\UseLanguage{Chinese}
+
+%%================================
+%% tip
+%%================================
+\usepackage[many]{tcolorbox}
+\newenvironment{tip}[1][提示]{%
+    \begin{tcolorbox}[breakable,
+        enhanced,
+        width = \linewidth,
+        colback = paper, colbacktitle = paper,
+        colframe = gray!50, boxrule=0.2mm,
+        coltitle = black,
+        fonttitle = \sffamily,
+        attach boxed title to top left = {yshift=-\tcboxedtitleheight/2, xshift=.5cm},
+        boxed title style = {boxrule=0pt, colframe=paper},
+        before skip = 0.3cm,
+        after skip = 0.3cm,
+        top = 3mm,
+        bottom = 3mm,
+        title={\scshape\sffamily #1}]%
+}{\end{tcolorbox}}
+
+\title{电磁场部分复习}
+\author{赵舞穹}
+\date{\today}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\maketitle
+
+\section{麦克斯韦方程}
+
+\subsection{基本量及其关系}
+
+\begin{itemize}
+  \item $\vec{E}(\vec{r},t)$ --- 电场强度 --- \si{\V\per\m}
+  \item $\vec{D}(\vec{r},t)$ --- 电通量密度（电位移） --- \si{\C\per\m\squared}
+  \item $\vec{H}(\vec{r},t)$ --- 磁场强度 --- \si{\weber\per\m\squared}
+  \item $\vec{B}(\vec{r},t)$ --- 磁感应强度（磁通量密度） --- \si{\A\per\m}
+\end{itemize}
+
+\begin{tip}
+  此处所有的矢量符号我没有按照书本的印刷体，而是和手写一样使用箭头表示（$\vec{\cdot}$）；
+  大家在作业、考试中可以注意书写的规范性，区分矢量和标量.
+\end{tip}
+
+\subsubsection{库仑定理}
+
+\begin{equation}
+  \vec{E}=\frac{q}{2\pi\varepsilon r^2}\vec{r}_0,
+\end{equation}
+式中 $\varepsilon$ 为介质常数，定义为
+\begin{equation}
+  \varepsilon\triangleq\varepsilon_r\varepsilon_0,
+\end{equation}
+式中 $\varepsilon_r$ 为相对介电系数.
+
+\subsection{洛伦兹力}
+运动的点电荷在磁场中受到的力：
+\begin{equation}
+  \vec{F}=q(\vec{E}+\vec{v}\times\vec{B}).
+\end{equation}
+
+\subsubsection{介质特性}
+物质的本构关系：
+\begin{subequations}
+  \begin{align}
+    \vec{D}&=\varepsilon\vec{E},\\
+    \vec{B}&=\mu\vec{H},\\
+    \vec{J}_c&=\sigma\vec{E},
+  \end{align}
+\end{subequations}
+式中传导电流密度 $\vec{J}_c=\vec{J}-\vec{J}_V=\vec{J}-\rho_V\vec{v}$.
+
+\subsection{Maxwell 方程组}
+
+\subsubsection{法拉第定理}
+微分形式、积分形式和时谐场的复矢量形式：
+\begin{subequations}
+  \begin{align}
+    \nabla\times\vec{E}&=-\pdv{\vec{B}}{t},\label{eq:Faraday_d}\\
+    \oint_l\vec{E}\cdot\odif{\vec{l}}&=-\int_S\pdv{\vec{B}}{t}\cdot\odif{\vec{S}},\\
+    \nabla\times\vec{E}&=-j\omega\vec{B}.
+  \end{align}
+\end{subequations}
+
+\subsubsection{安培定理}
+微分形式、积分形式和时谐场的复矢量形式：
+\begin{subequations}
+  \begin{align}
+    \nabla\times\vec{H}&=\vec{J}+\pdv{\vec{D}}{t},\\
+    \oint_l\vec{H}\cdot\odif{\vec{l}}&=\int_S\left(\vec{J}+\pdv{\vec{D}}{t}\right)\cdot\odif{\vec{S}},\\
+    \nabla\times\vec{H}&=\vec{J}+j\omega\vec{D}.
+  \end{align}
+\end{subequations}
+
+\subsubsection{高斯定理}
+微分形式和积分形式：
+\begin{subequations}
+  \begin{align}
+    \nabla\cdot\vec{D}&=\rho_V,\\
+    \oint_S\vec{D}\cdot\odif{\vec{S}}&=\int_V\rho_V\odif{V}.
+  \end{align}
+\end{subequations}
+
+\subsubsection{磁通连续性原理}
+微分形式和积分形式：
+\begin{subequations}
+  \begin{align}
+    \nabla\cdot\vec{B}&=0,\\
+    \oint_S\vec{B}\cdot\odif{\vec{S}}&=0.
+  \end{align}
+\end{subequations}
+
+\subsubsection{坡印廷定理}
+
+坡印廷矢量定义
+\begin{equation}
+  \vec{S}(\vec{r},t)=\vec{E}(\vec{r},t)\times\vec{H}(\vec{r},t).
+\end{equation}
+特殊地，对于\textbf{时谐场}，有
+\begin{align}
+  \vec{S}(\vec{r})&=\vec{E}(\vec{r})\times\vec{H}^*(\vec{r}),\\
+  \langle\vec{S}(t)\rangle&=\frac12\mathrm{Re}\left[\vec{E}(\vec{r})\times\vec{H}^*(\vec{r})\right].
+\end{align}
+
+\section{平面波}
+
+\subsection{波方程}
+
+在无源空间中，我们有：
+\begin{equation}
+  (\nabla^2+k^2)\left\{\begin{aligned}
+    \vec{E}\\\vec{H}
+  \end{aligned}\right.=0,
+\end{equation}
+式中
+\begin{equation}
+  k^2=\omega^2\mu\varepsilon,
+\end{equation}
+其中 $|k|=\omega\sqrt{\mu\varepsilon}$ 为传播常数.\ %
+在方向上，$\vec{E}$, $\vec{H}$ 和波矢 $\vec{k}$ 两两垂直.
+
+波阻抗（本征阻抗）
+\begin{equation}
+  Z=\frac1Y=\frac{\omega\mu}{k}=\frac{k}{\omega\varepsilon}=\sqrt{\frac{\mu}{\varepsilon}},
+\end{equation}
+波长
+\begin{equation}
+  \lambda=\frac{2\pi}{k},
+\end{equation}
+相速
+\begin{equation}
+  v_p=\frac{\omega}{k}=\frac{\omega}{\omega\sqrt{\mu\varepsilon}}=\frac1{\sqrt{\mu\varepsilon}}.
+\end{equation}
+
+\subsection{极化}
+对于沿 $\vec{z}$ 方向的电场
+\begin{equation}
+  \vec{E}\triangleq\vec{E}_x+\vec{E}_y,
+\end{equation}
+判断
+\begin{equation}
+  \dot{A}=\frac{\dot{E}_x}{\dot{E}_y}=Ae^{j\varphi},
+\end{equation}
+的幅度 $A$ 和相位 $\varphi$.
+
+\subsection{有耗介质}
+
+定义复介电常数
+\begin{equation}
+  \widetilde{\varepsilon}\triangleq\varepsilon-j\frac{\sigma}{\omega},
+\end{equation}
+其中虚部表示介质电导率的影响.\ %
+穿透深度
+\begin{equation}
+  d_p=\frac1{k_i},
+\end{equation}
+此处场振幅减为 $z=0$ 处的 $\frac1e$.
+
+\subsubsection{电导率很小}
+若满足 $\frac{\sigma}{\omega\varepsilon}\ll1$，有
+\begin{gather}
+  k=\omega\sqrt{\mu\varepsilon}\left(1-j\frac{\sigma}{2\omega\varepsilon}\right),\\
+  d_p=\frac2\sigma\sqrt{\frac\varepsilon\mu}.
+\end{gather}
+
+\subsubsection{电导率很大}
+若满足 $\frac{\sigma}{\omega\varepsilon}\gg1$，有
+\begin{gather}
+  k=\sqrt{\omega\mu\frac\sigma2}(1-j),\\
+  d_p=\frac{2}{\omega\mu\sigma}=\delta,
+\end{gather}
+其中 $\delta$ 很小，被称为趋肤深度.
+
+\section{波的反射与折射及多层介质中波的传播}
+
+To be added ...
+
+\appendix
+\section{作业讨论}
+
+\subsection{习题3.4}
+\begin{problem*}[]
+  如果在某一表面 $\vec{E}=\vec{0}$，是否就可得出在该表面 $\pdv{\vec{B}}{t}=0$？为什么？
+\end{problem*}
+
+\textbf{不能}.\ %
+由 \eqref{eq:Faraday_d}，
+\begin{equation}
+  \pdv{\vec{B}}{t}=-\nabla\times\vec{E}\neq0.
+\end{equation}
+\begin{tip}[注意]
+  零向量的旋度（curl）不一定为零！
+  我们可以具体将其写为
+  \begin{equation}
+    \nabla\times\vec{E}=\begin{vmatrix}
+      \vec{x}_0&\vec{y}_0&\vec{z}_0\\
+      \pdv{}{x}&\pdv{}{y}&\pdv{}{z}\\
+      E_x&E_y&E_z
+    \end{vmatrix}\neq0.
+  \end{equation}
+\end{tip}
+
+
+\section{Open Access License}
+此文档依据 \href{https://github.com/Teddy-van-Jerry/Electromagnetism_Review_cn/blob/master/LICENSE}{CC--BY--SA--4.0} 公开.
+
+\end{document}
